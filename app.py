@@ -85,6 +85,10 @@ def call_dify_api(user_id: str, message: str) -> str:
         return "応答がタイムアウトしました。もう一度お試しください。"
     except requests.exceptions.RequestException as e:
         app.logger.error(f"Dify API error: {e}")
+        # エラーレスポンスの詳細をログ出力
+        if hasattr(e, 'response') and e.response is not None:
+            app.logger.error(f"Response status: {e.response.status_code}")
+            app.logger.error(f"Response body: {e.response.text}")
         return "エラーが発生しました。しばらくしてからもう一度お試しください。"
 
 
