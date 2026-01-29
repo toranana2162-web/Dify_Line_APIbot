@@ -56,13 +56,15 @@ def call_dify_api(user_id: str, message: str) -> str:
     # 会話IDがあれば継続、なければ新規会話
     conversation_id = user_conversations.get(user_id)
     
-    # ユーザー設定から入力変数を取得
+    # ユーザー設定から入力変数を取得（空の値は送信しない）
     settings = user_settings.get(user_id, {})
-    inputs = {
-        "age": settings.get("age", ""),
-        "address": settings.get("address", ""),
-        "tenki": settings.get("tenki", "")
-    }
+    inputs = {}
+    if settings.get("age"):
+        inputs["age"] = settings["age"]
+    if settings.get("address"):
+        inputs["address"] = settings["address"]
+    if settings.get("tenki"):
+        inputs["tenki"] = settings["tenki"]
     
     payload = {
         "inputs": inputs,
